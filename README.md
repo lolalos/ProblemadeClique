@@ -5,7 +5,7 @@ ____________________________________________________
 
 El **problema de la clique** es un problema clásico de la teoría de la complejidad computacional, clasificado como NP-completo.
 
----
+
 
 ## Descripción del Problema
 
