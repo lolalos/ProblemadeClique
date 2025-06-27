@@ -1,5 +1,5 @@
 # Problema de Clique
-
+____________________________________________________
 ## Algoritmos Computacionales  
 **Tarea 2**
 
