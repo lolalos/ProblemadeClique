@@ -377,75 +377,79 @@ def greedy_clique(self) -> List[int]:
     return clique
 \end{lstlisting}
 
-\subsection{Fundamentación sobre la implementación}
-La elección de Python y sus estructuras de datos nativas (diccionarios y conjuntos) permite un prototipado rápido y un código legible, sin sacrificar un rendimiento razonable para las operaciones fundamentales del grafo. La ausencia deliberada de librerías externas como `NetworkX` asegura que la lógica de los algoritmos sea transparente y controlada, cumpliendo con los objetivos pedagógicos del proyecto.
+La elección de Python y sus estructuras de datos nativas (diccionarios y conjuntos) permite un prototipado rápido y un código legible, sin sacrificar un rendimiento razonable para las operaciones fundamentales del grafo. La ausencia deliberada de librerías externas como \texttt{NetworkX} asegura que la lógica de los algoritmos sea transparente y controlada, cumpliendo con los objetivos pedagógicos del proyecto.
 
-% ==================== Estructura del proyecto (Diagrama con TikZ) ====================
 \begin{figure}[H]
     \centering
+    \resizebox{0.95\textwidth}{!}{%
     \begin{tikzpicture}[
-        level 1/.style={sibling distance=5cm, level distance=1.5cm},
-        level 2/.style={sibling distance=4cm, level distance=1.5cm},
-        level 3/.style={sibling distance=2.5cm, level distance=1.5cm},
-        edge from parent/.style={draw, -latex},
-        main/.style={rectangle, rounded corners, draw, fill=blue!20, text width=4cm, text centered, minimum height=1cm},
-        file/.style={trapezium, trapezium left angle=70, trapezium right angle=110, draw, fill=green!20, text width=3.5cm, text centered, minimum height=1cm, drop shadow},
-        script/.style={ellipse, draw, fill=orange!20, text width=3cm, text centered, minimum height=1cm, drop shadow},
-        doc/.style={rectangle, draw, fill=purple!20, text width=3cm, text centered, minimum height=1cm, drop shadow},
-        desc/.style={text width=3.5cm, font=\footnotesize\itshape}
+        node distance=0.2cm and 0.5cm,
+        file/.style={rectangle, draw, font=\scriptsize\ttfamily, align=left, minimum height=1cm},
+        container/.style={rectangle, draw, dashed, inner sep=0.4cm},
+        arrow/.style={-latex, thick, gray}
     ]
-    \node[main] {Proyecto: ProblemadeClique}
-        child {node[file] (backend) {\texttt{backend/}}
-            child {node[script] (clique) {\texttt{clique\_simple.py}}
-                child {node[desc] {Lógica principal: \\ - Carga de datos \\ - Algoritmos de clique \\ - Interfaz de consola}}
-            }
-            child {node[doc] (informe) {\texttt{informe.tex}}
-                child {node[desc] {Documentación del proyecto en LaTeX}}
-            }
-        }
-        child {node[file] (data) {\texttt{com-dblp.top5000.cmty.txt}}
-            child {node[desc] {Dataset de comunidades de colaboración académica}}
-        }
-        child {node[file] (readme) {\texttt{README.md}}
-            child {node[desc] {Instrucciones de uso y descripción del proyecto}}
-        }
-        child {node[script] (test) {\texttt{test.bat}}
-            child {node[desc] {Script para automatizar la ejecución y pruebas rápidas}}
-        };
-        
-    \draw[->, thick, dashed, gray] (data) -- (clique) node[midway, above, sloped] {lee};
-    \draw[->, thick, dashed, gray] (test) -- (clique) node[midway, above, sloped] {ejecuta};
-    \draw[->, thick, dashed, gray] (informe) -- (clique) node[midway, below, sloped] {documenta};
-    \end{tikzpicture}
-    \caption{Estructura del proyecto \texttt{ProblemadeClique} y sus componentes principales.}
-    \label{fig:project_structure}
+    % Backend files
+    \node[file, text width=5.2cm] (clique) {
+        \textbf{clique\_simple.py}\\
+        Clase: SimpleCliqueSolver\\
+        Métodos: \_\_init\_\_(), load\_from\_file(), is\_clique(), greedy\_clique(), etc.\\
+        Función main(): menú interactivo.
+    };
+    \node[file, text width=5.2cm, below=of clique] (informe) {
+        \textbf{informe.tex}\\
+        Documentación del proyecto en LaTeX.
+    };
+    \node[container, fit=(clique) (informe), label={[font=\bfseries]above:backend/}] (backend_box) {};
+
+    % Other files
+    \node[file, text width=5.2cm, right=3.5cm of clique] (dataset) {
+        \textbf{com-dblp.top5000.cmty.txt}\\
+        Dataset de comunidades DBLP.
+    };
+    \node[file, text width=5.2cm, below=of dataset] (readme) {
+        \textbf{README.md}\\
+        Instrucciones y descripción general.
+    };
+    \node[file, text width=5.2cm, below=of readme] (test) {
+        \textbf{test.bat}\\
+        Script para automatizar ejecución en Windows.
+    };
+
+    % Connections
+    \draw[arrow] (dataset.west) -- (clique.east) node[midway, above, sloped, font=\tiny] {es leído por};
+    \draw[arrow] (test.west) -- (clique.east) node[midway, below, sloped, font=\tiny] {ejecuta};
+    \draw[arrow] (informe.east) -- (clique.west) node[midway, above, sloped, font=\tiny] {documenta};
+    \end{tikzpicture}%
+    }
+    \caption{Estructura del proyecto y relación entre sus componentes.}
+    \label{fig:project_structure_detailed}
 \end{figure}
 
 \section{Descripción de lenguajes y herramientas}
 \begin{itemize}
-    \item \textbf{Python 3.x}: Lenguaje de programación principal, elegido por su sintaxis clara, su potente biblioteca estándar y su idoneidad para la manipulación de estructuras de datos complejas.
-    \item \textbf{Estructuras de datos estándar}: Uso intensivo de listas, conjuntos y diccionarios para una implementación eficiente y pitónica del grafo y los algoritmos.
-    \item \textbf{Sin dependencias externas}: El proyecto se diseñó para no requerir librerías de terceros (como NetworkX o NumPy), con el fin de centrarse en la implementación fundamental de los algoritmos.
-    \item \textbf{Consola (CLI)}: La interfaz de usuario es una aplicación de línea de comandos, lo que facilita la automatización y la ejecución en diversos entornos.
-    \item \textbf{LaTeX}: Utilizado para la generación de este informe, permitiendo una alta calidad tipográfica para fórmulas, algoritmos y diagramas.
+    \item \textbf{Python 3.x}: Lenguaje principal, elegido por su sintaxis clara y biblioteca estándar.
+    \item \textbf{Estructuras estándar}: Listas, conjuntos y diccionarios para eficiencia y claridad.
+    \item \textbf{Sin dependencias externas}: No se usan librerías de terceros como NetworkX o NumPy.
+    \item \textbf{Consola (CLI)}: Interfaz de línea de comandos para facilitar la ejecución y pruebas.
+    \item \textbf{LaTeX}: Para la documentación y presentación formal del informe.
 \end{itemize}
 
 \section{Proceso de experimentación}
 \subsection{Preparación de los datos}
-Se utiliza el dataset DBLP, que contiene coautorías en publicaciones científicas. Se procesa el archivo de comunidades para construir un grafo donde los nodos son autores y una arista conecta a dos autores si han colaborado. Este paso es crucial para evaluar los algoritmos en un grafo real con estructura de "mundo real" (scale-free, alta clusterización).
+Se utiliza el dataset DBLP, que contiene coautorías en publicaciones científicas. Se procesa el archivo de comunidades para construir un grafo donde los nodos son autores y una arista conecta a dos autores si han colaborado.
 
 \subsection{Ejecución de los algoritmos}
-Ambos algoritmos (fuerza bruta en subgrafos y greedy en el grafo completo) se ejecutan sobre las mismas instancias de datos. Se registran sistemáticamente las métricas clave: tamaño del clique encontrado, tiempo de ejecución, y nodos que componen el clique.
+Ambos algoritmos (fuerza bruta en subgrafos y greedy en el grafo completo) se ejecutan sobre las mismas instancias de datos. Se registran sistemáticamente las métricas clave: tamaño del clique encontrado, tiempo de ejecución y nodos que componen el clique.
 
 \subsection{Repetición y validación}
 Se realizan múltiples ejecuciones, especialmente con el algoritmo greedy, utilizando diferentes puntos de partida (aunque la versión presentada es determinista) para evaluar la sensibilidad de la heurística. Los resultados del algoritmo exacto en subgrafos pequeños sirven como línea base para cuantificar el "ratio de aproximación" del algoritmo greedy en esos mismos subgrafos.
 
 \subsection{Fundamentación del proceso experimental}
-Un diseño experimental riguroso es esencial para obtener conclusiones válidas. Al utilizar un dataset real como DBLP, se asegura la relevancia práctica de los hallazgos. La comparación directa de métricas (tamaño de clique vs. tiempo) en las mismas instancias permite una evaluación justa y cuantitativa del trade-off entre optimalidad y eficiencia. La validación cruzada entre el algoritmo exacto y el aproximado en subproblemas manejables proporciona una medida de confianza en la calidad de las soluciones aproximadas, fundamentando empíricamente las conclusiones teóricas sobre el rendimiento de cada enfoque.
+El uso de un dataset real como DBLP asegura la relevancia práctica de los hallazgos. La comparación directa de métricas en las mismas instancias permite una evaluación justa y cuantitativa del trade-off entre optimalidad y eficiencia. La validación cruzada entre el algoritmo exacto y el aproximado en subproblemas manejables proporciona confianza en la calidad de las soluciones aproximadas.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{img/experimentacion.png}
+    \includegraphics[width=0.8\textwidth]{img/esquema.png}
     \caption{Esquema del proceso experimental y comparación de resultados.}
     \label{fig:esquema_experimental}
 \end{figure}
@@ -586,7 +590,7 @@ Finalmente, la capacidad del algoritmo greedy para extraer un clique significati
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{img/distribucion_comunidades.png}
+    \includegraphics[width=0.8\textwidth]{img/comunidades.png}
     \caption{Distribución de tamaños de comunidades en el dataset DBLP.}
     \label{fig:distribucion_comunidades}
 \end{figure}
@@ -602,6 +606,8 @@ Finalmente, la capacidad del algoritmo greedy para extraer un clique significati
 
 % ==================== REFERENCIAS ====================
 \chapter{Referencias}
+
+A continuación se listan las principales referencias bibliográficas utilizadas para la elaboración del presente informe, abarcando teoría de grafos, complejidad computacional, algoritmos de clique y aplicaciones en redes complejas:
 
 \begin{thebibliography}{99}
 
@@ -640,146 +646,6 @@ Zuckerman, D. (2006). Linear degree extractors and the inapproximability of max 
 \newpage
 
 % ==================== ANEXOS ====================
-\appendix
-\chapter{Código fuente completo}
-
-\section{Implementación en Python del solver de cliques}
-
-\begin{lstlisting}[language=Python,caption={Solver de cliques en Python}]
-import time
-from itertools import combinations
-from typing import List, Dict, Set, Optional
-
-class Graph:
-    """Clase para representar un grafo no dirigido."""
-    def __init__(self):
-        self.adj: Dict[int, Set[int]] = {}
-
-    def add_edge(self, u: int, v: int):
-        """Añade una arista entre los nodos u y v."""
-        self.adj.setdefault(u, set()).add(v)
-        self.adj.setdefault(v, set()).add(u)
-
-    def get_nodes(self) -> List[int]:
-        """Devuelve una lista de todos los nodos del grafo."""
-        return list(self.adj.keys())
-
-    def is_clique(self, nodes: List[int]) -> bool:
-        """Verifica si un conjunto de nodos forma un clique."""
-        for i in range(len(nodes)):
-            for j in range(i + 1, len(nodes)):
-                if nodes[j] not in self.adj.get(nodes[i], set()):
-                    return False
-        return True
-
-class CliqueSolver:
-    """Clase que implementa algoritmos para encontrar cliques."""
-    def __init__(self, graph: Graph):
-        self.graph = graph
-
-    def brute_force_clique(self, node_subset: Optional[List[int]] = None) -> List[int]:
-        """
-        Encuentra el clique máximo mediante fuerza bruta en un subconjunto de nodos.
-        Si no se proporciona un subconjunto, utiliza todos los nodos (inviable para grafos grandes).
-        """
-        nodes = node_subset if node_subset is not None else self.graph.get_nodes()
-        
-        if not nodes:
-            return []
-
-        max_clique: List[int] = []
-        
-        for k in range(len(nodes), 0, -1):
-            for subset_tuple in combinations(nodes, k):
-                subset = list(subset_tuple)
-                if self.graph.is_clique(subset):
-                    return subset  # El primero encontrado es el máximo
-        return []
-
-    def greedy_clique(self) -> List[int]:
-        """
-        Encuentra un clique (no necesariamente máximo) usando una heurística greedy.
-        """
-        if not self.graph.adj:
-            return []
-
-        # Ordenar nodos por grado para iterar sobre buenos candidatos iniciales
-        nodes_by_degree = sorted(self.graph.adj, key=lambda n: len(self.graph.adj[n]), reverse=True)
-        
-        best_clique: List[int] = []
-
-        # Probar a iniciar desde varios nodos de alto grado para mejorar la calidad
-        for start_node in nodes_by_degree[:5]: # Probar con los 5 mejores
-            clique = [start_node]
-            candidates = self.graph.adj[start_node].copy()
-            
-            while candidates:
-                # Elige el candidato con más conexiones a otros candidatos
-                best_candidate = max(candidates, key=lambda c: len(candidates.intersection(self.graph.adj[c])))
-                
-                clique.append(best_candidate)
-                candidates.intersection_update(self.graph.adj[best_candidate])
-            
-            if len(clique) > len(best_clique):
-                best_clique = clique
-                
-        return best_clique
-\end{lstlisting}
-
-\section{Ejemplo de uso}
-\begin{lstlisting}[language=Python,caption={Ejemplo de uso del solver}]
-# Crear un grafo de ejemplo
-g = Graph()
-edges = [(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4), (3, 5), (4, 5)]
-for u, v in edges:
-    g.add_edge(u, v)
-
-# Inicializar el solver
-solver = CliqueSolver(g)
-
-# --- Algoritmo Exacto ---
-print("--- Búsqueda Exacta (Fuerza Bruta) ---")
-start_time = time.time()
-# Se ejecuta sobre todos los nodos porque el grafo es pequeño
-exact_clique = solver.brute_force_clique()
-end_time = time.time()
-print(f"Clique máximo encontrado: {exact_clique}")
-print(f"Tamaño: {len(exact_clique)}")
-print(f"Tiempo: {end_time - start_time:.6f} segundos")
-
-print("\n" + "="*30 + "\n")
-
-# --- Algoritmo de Aproximación ---
-print("--- Búsqueda Aproximada (Greedy) ---")
-start_time = time.time()
-greedy_clique = solver.greedy_clique()
-end_time = time.time()
-print(f"Clique encontrado: {greedy_clique}")
-print(f"Tamaño: {len(greedy_clique)}")
-print(f"Tiempo: {end_time - start_time:.6f} segundos")
-
-# Salida esperada:
-# Clique máximo encontrado: [1, 2, 3, 4] (o una permutación)
-# Clique encontrado (greedy): puede ser [1, 2, 3, 4] o [3, 4, 5] dependiendo de la heurística
-\end{lstlisting}
-
-\chapter{Resultados experimentales adicionales}
-\section{Instancias de prueba y resultados}
-En esta sección se podrían incluir tablas detalladas de ejecuciones sobre grafos de referencia (e.g., de la DIMACS Challenge) para comparar los resultados con benchmarks establecidos en la literatura.
-
-\begin{table}[H]
-    \centering
-    \caption{Resultados hipotéticos en grafos de benchmark DIMACS.}
-    \begin{tabular}{@{}lcccc@{}}
-        \toprule
-        \textbf{Grafo} & \textbf{Nodos} & \textbf{Aristas} & \textbf{$\omega(G)$ Conocido} & \textbf{Greedy $\omega(G)$} \\
-        \midrule
-        C125.9 & 125 & 6963 & 34 & 30-32 \\
-        brock200\_2 & 200 & 9876 & 21 & 17-19 \\
-        p\_hat300-2 & 300 & 21928 & 25 & 22-24 \\
-        \bottomrule
-    \end{tabular}
-\end{table}
 
 \section{Discusión ampliada}
 La elección de la heurística en el algoritmo greedy es fundamental. En nuestra implementación, se seleccionó el candidato que maximiza las conexiones con otros candidatos, lo cual es una mejora sobre la simple selección por grado global. Otras heurísticas podrían incluir:
@@ -789,5 +655,19 @@ La elección de la heurística en el algoritmo greedy es fundamental. En nuestra
     \item \textbf{Metaheurísticas:} Utilizar el resultado del greedy como solución inicial para algoritmos más avanzados como Recocido Simulado (Simulated Annealing) o Búsqueda Tabú, que pueden explorar el espacio de soluciones de manera más inteligente.
 \end{itemize}
 Estas extensiones representan los siguientes pasos lógicos para mejorar la calidad de la solución aproximada, manteniendo una eficiencia computacional aceptable.
+\section{Acceso al código fuente en GitHub}
+
+El código fuente completo del proyecto, incluyendo las implementaciones de los algoritmos exacto y greedy, así como scripts de prueba y documentación, está disponible públicamente en el siguiente repositorio de GitHub:
+
+\begin{center}
+\url{https://github.com/lolalos/ProblemadeClique}
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.25\textwidth]{img/qr_github.png}
+    \caption{Código QR para acceder directamente al repositorio en GitHub.}
+    \label{fig:qr_github}
+\end{figure}
 
 \end{document}
