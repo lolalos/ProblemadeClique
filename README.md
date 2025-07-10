@@ -364,23 +364,52 @@ El código fuente completo está disponible en:
 ---
 
 ## Apéndice: Estructura del Proyecto
+```mermaid
+graph TD
+    A[ProblemadeClique]
+    subgraph Backend
+        B1[clique_simple.py<br/>Algoritmo exacto y greedy (CLI)]
+        B2[clique_solver.py<br/>Lógica de resolución de cliques]
+        B3[graph_loader.py<br/>Carga y procesamiento de grafos]
+        B4[main.py<br/>Servidor Flask (API REST)]
+        B5[visualizer.py<br/>Utilidades para visualización]
+        B6[requirements.txt<br/>Dependencias de backend]
+    end
+    subgraph Frontend
+        C1[index.html<br/>Interfaz web principal]
+        C2[static/<br/>Archivos estáticos (JS, CSS)]
+    end
+    subgraph Data
+        D1[com-dblp.top5000.cmty.txt<br/>Dataset DBLP (entrada)]
+    end
+    subgraph Scripts
+        E1[test.bat<br/>Ejecución rápida CLI]
+        E2[install_venv.bat<br/>Instalación de entorno virtual]
+        E3[run_venv.bat<br/>Ejecución del servidor web]
+    end
+    F[README.md<br/>Documentación principal]
 
-```
-ProblemadeClique/
-├── backend/
-│   ├── clique_simple.py
-│   ├── main.py
-│   ├── clique_solver.py
-│   ├── graph_loader.py
-│   ├── visualizer.py
-│   └── requirements.txt
-├── frontend/
-│   ├── index.html
-│   └── static/
-├── com-dblp.top5000.cmty.txt
-├── test.bat
-├── install_venv.bat
-└── run_venv.bat
+    A --> Backend
+    A --> Frontend
+    A --> Data
+    A --> Scripts
+    A --> F
+
+    Backend --> B1
+    Backend --> B2
+    Backend --> B3
+    Backend --> B4
+    Backend --> B5
+    Backend --> B6
+
+    Frontend --> C1
+    Frontend --> C2
+
+    Data --> D1
+
+    Scripts --> E1
+    Scripts --> E2
+    Scripts --> E3
 ```
 
 ---
