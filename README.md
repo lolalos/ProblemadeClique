@@ -362,55 +362,36 @@ El código fuente completo está disponible en:
 [https://github.com/lolalos/ProblemadeClique](https://github.com/lolalos/ProblemadeClique)
 
 ---
-
 ## Apéndice: Estructura del Proyecto
-```mermaid
-graph TD
-    A[ProblemadeClique]
-    subgraph Backend
-        B1[clique_simple.py<br/>Algoritmo exacto y greedy (CLI)]
-        B2[clique_solver.py<br/>Lógica de resolución de cliques]
-        B3[graph_loader.py<br/>Carga y procesamiento de grafos]
-        B4[main.py<br/>Servidor Flask (API REST)]
-        B5[visualizer.py<br/>Utilidades para visualización]
-        B6[requirements.txt<br/>Dependencias de backend]
-    end
-    subgraph Frontend
-        C1[index.html<br/>Interfaz web principal]
-        C2[static/<br/>Archivos estáticos (JS, CSS)]
-    end
-    subgraph Data
-        D1[com-dblp.top5000.cmty.txt<br/>Dataset DBLP (entrada)]
-    end
-    subgraph Scripts
-        E1[test.bat<br/>Ejecución rápida CLI]
-        E2[install_venv.bat<br/>Instalación de entorno virtual]
-        E3[run_venv.bat<br/>Ejecución del servidor web]
-    end
-    F[README.md<br/>Documentación principal]
 
-    A --> Backend
-    A --> Frontend
-    A --> Data
-    A --> Scripts
-    A --> F
-
-    Backend --> B1
-    Backend --> B2
-    Backend --> B3
-    Backend --> B4
-    Backend --> B5
-    Backend --> B6
-
-    Frontend --> C1
-    Frontend --> C2
-
-    Data --> D1
-
-    Scripts --> E1
-    Scripts --> E2
-    Scripts --> E3
+```text
+ProblemadeClique/
+│
+├── backend/
+│   ├── clique_simple.py
+│   │   ├── Clase SimpleCliqueSolver: lógica principal (greedy y fuerza bruta)
+│   │   ├── Métodos: carga de grafo, verificación de clique, análisis, visualización
+│   │   └── Función main(): menú interactivo CLI
+│   └── informe.tex
+│       └── Documentación formal en LaTeX (teoría, análisis, resultados)
+│
+├── com-dblp.top5000.cmty.txt
+│   └── Dataset DBLP: comunidades académicas (entrada)
+│
+├── README.md
+│   └── Documentación principal del proyecto
+│
+└── test.bat
+    ├── Script de automatización para Windows
+    └── Ejecuta el flujo completo de pruebas (CLI)
 ```
+
+**Resumen de componentes:**
+- `backend/clique_simple.py`: Implementa los algoritmos exacto (fuerza bruta) y greedy, análisis y visualización.
+- `backend/informe.tex`: Documento académico en LaTeX.
+- `com-dblp.top5000.cmty.txt`: Archivo de entrada con comunidades del dataset DBLP.
+- `README.md`: Guía y documentación del proyecto.
+- `test.bat`: Script para ejecutar pruebas y facilitar el uso en Windows.
 
 ---
 
